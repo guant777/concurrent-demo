@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:mysql://服务器地址:3306/risk_management?useSSL=false&useCursorFetch=true&defaultFetchSize=1000
+    username: 用户名
+    password: 密码
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      idle-timeout: 60000
+      connection-timeout: 60000
+      validation-timeout: 3000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 2000
+      minimum-idle: 10

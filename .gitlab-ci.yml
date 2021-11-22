@@ -1,0 +1,57 @@
+cache:
+  paths:
+    - .m2/repository
+
+
+
+stages:
+  - test
+  - build
+  - deploy
+
+
+
+
+job_test:
+  stage: test
+  script: 'sh scripts/sonar_analyze.sh'
+  only:
+    - api
+    - trigger
+  except:
+    variables:
+      - $TRIGGER_DEPLOY == "true"
+
+
+
+
+job_build:
+  stage: build
+  script:
+    - set -eo pipefail
+
+    - mvn clean package -Dmaven.test.skip=true ${PROFILE} -U
+    - cp -r /opt/omega-build docker/omega-build
+         
+    - echo 默认 jar 是放在 target/ 下，如果项目是放在诸如 risk-management-web 子模块中, 请调整这里的路径
+    - mv target/*.jar docker/
+    - cd docker && docker build -f omega-build/spring-boot/fatjar/Dockerfile --build-arg APP=risk-management -t harbor.ziroom.com/${TAG}:$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID .
+                
+    - docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} harbor.ziroom.com
+    - docker push harbor.ziroom.com/${TAG}:$CI_COMMIT_REF_NAME-$CI_PIPELINE_ID
+  only:
+    - api
+    - triggers
+  except:
+    variables:
+      - $TRIGGER_DEPLOY == "true"
+
+
+
+job_deploy:
+  stage: deploy
+  script:
+    - mvn clean package deploy -pl ${DEPLOY_MODULES} -am -DskipTests
+  only:
+    variables:
+      - $TRIGGER_DEPLOY == "true"

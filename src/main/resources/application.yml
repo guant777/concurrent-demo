@@ -1,0 +1,32 @@
+# 配置系统端口号
+server:
+  port: 8085
+
+# 配置spring
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+    date-format: yyyyMMdd HH:mm:ss
+    time-zone: GMT+8
+  profiles:
+    active: @spring.profiles.active@
+
+  # 配置tomcat允许上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 100MB # 单个文件大小
+      max-request-size: 100MB # 设置总上传的数据大小
+      enabled: true #开启
+
+# Mybatis配置
+#    mybatis:
+#      type-aliases-package: com.ziroom.guant.model.DO
+#      mapper-locations: classpath:mapper/*Mapper.xml
+
+# Logging configuration
+logging:
+  level:
+    org.springframework:
+      data: DEBUG
+      security: DEBUG
