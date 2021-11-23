@@ -1,5 +1,5 @@
 
-# 高并发编程解决方案
+# 高并发编程解决方案 concurrent-demo
 
 ### 1.SpringBoot+Redis+lua 实现黑客防刷攻击、短信验证等；
 
@@ -17,7 +17,3 @@
 >用户登录成功后，客户端把cookies里面的cartId和userId发给购物车系统，购物车系统通过cartId把redis未登录的数据合并插入到该userId的数据库里面。
 最后重新刷新添加到登录userId的redis数据,删除未登录carId的redis数据。
 
-    
-
-
-# concurrent-demo
